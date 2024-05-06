@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Newsletter Sign Up</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: "Work Sans", sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+    </style>
+</head>
+
+<body class="grid place-items-center bg-gray-700">
+    <div id="app">
+        <div class="bg-white rounded-3xl p-4" :class="submitted ? 'hidden' : 'block'">
+            <form @submit.prevent="subscribeNewsletter">
+                <div class="flex flex-row justify-between gap-16">
+                    <div class="flex flex-col justify-center gap-3 pl-7 max-w-sm">
+                        <p class="text-4xl font-bold text-gray-800">Stay Updated!</p>
+                        <p class="font-medium text-sm text-gray-700"> Join 60,000+ product managers receiving monthly updates on:</p>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex flex-row gap-3">
+                                <img src="icon-list.svg" width="18" alt="">
+                                <p class="font-medium text-sm text-gray-700">Product discovery and building what matters</p>
+                            </div>
+                            <div class="flex flex-row gap-3">
+                                <img src="icon-list.svg" width="18" alt="">
+                                <p class="font-medium text-sm text-gray-700">Measuring to ensure updates are success</p>
+                            </div>
+                            <div class="flex flex-row gap-3">
+                                <img src="icon-list.svg" width="18" alt="">
+                                <p class="font-medium text-sm text-gray-700">And Much More!</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 pt-3">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex justify-between">
+                                    <label class="font-semibold text-xs text-gray-800">Email address</label>
+                                    <label class="font-semibold text-xs text-red-600" :class="InvalidEmail ? 'block' : 'hidden'"> {{ errorMessage }} </label>
+                                </div>
+                                <input type="text" placeholder="email@company.com" class="border-2 rounded-md py-3 px-4 w-full text-sm text-gray-700 focus:border-gray-500 focus:outline-none" :class="InvalidEmail ? 'border-red-600 bg-red-50' : 'border-gray-300 bg-white'" v-model="email">
+                            </div>
+                            <button class="bg-gray-800 rounded-md font-medium text-sm py-3 px-4 w-full text-white hover:bg-gradient-to-r from-[#FF537B] to-[#FF693A]">Subscribe to monthly newsletter</button>
+                        </div>
+                    </div>
+                    <div class="">
+                        <img src="illustration-sign-up-desktop.svg" width="300" alt="">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="bg-white rounded-3xl p-16 max-w-md" :class="submitted ? 'block' : 'hidden'">
+            <div class="flex flex-col justify-center gap-6">
+                <img src="icon-list.svg" width="50" alt="">
+                <p class="text-4xl font-bold text-gray-800">Thanks for subscribing!</p>
+                <p class="font-medium text-sm text-gray-700">A confirmation email has been sent to email <strong>{{ email }}</strong>. Please open it and click the button inside to confirm your subscription.</p>
+                <button class="bg-gray-800 rounded-md font-medium text-sm py-3 px-4 w-full text-white hover:bg-gradient-to-r from-[#FF537B] to-[#FF693A]" @click="updateStatus()">Dimiss message</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    email: '',
+                    errorMessage: '',
+                    InvalidEmail: false,
+                    submitted: false
+                };
+            },
+
+            methods: {
+                subscribeNewsletter() {
+                    var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+
+                    if(!this.email) {
+                        this.errorMessage = 'This field is required';
+                        this.InvalidEmail = true;
+                    } else {
+                        if(!pattern.test(this.email)) {
+                            this.errorMessage = 'Valid email required';
+                            this.InvalidEmail = true;
+                        } else {
+                            this.InvalidEmail = false;
+                            this.updateStatus()
+                        }
+                    }
+
+                },
+
+                updateStatus() {
+                    this.submitted = !this.submitted
+                }
+
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
